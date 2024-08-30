@@ -45,6 +45,7 @@ func LoginHandler(c *gin.Context) {
 	if token, err := utils.GenerateJWT(user, secret); err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "not authorized"})
 	} else {
+		utils.PersistCookie(c, token)
 		c.JSON(http.StatusOK, gin.H{"token": token})
 	}
 }
