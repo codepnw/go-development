@@ -53,6 +53,10 @@ func (u *User) GetById(db *gorm.DB) *gorm.DB {
 	return db.Table(u.Table()).Where("").First(u)
 }
 
+func (u *User) GetByAttr(db *gorm.DB) *gorm.DB {
+	return db.Table(u.Table()).First(u)
+}
+
 func (u *User) GetByIDs(ids []string) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
 		return db.Table(u.Table()).Where("id IN (?)", ids).First(u)

@@ -11,6 +11,7 @@ func NewRoutes(version string) {
 	r := gin.Default()
 	r.Use(cors.Default())
 
+	AuthRoutes(r, version)
 	UserRoutes(r, version)
 
 	fmt.Println("listening at port 8080")
