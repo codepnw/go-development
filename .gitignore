@@ -1,3 +1,4 @@
 static
 *.txt
 *_spawn
+*.db

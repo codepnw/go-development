@@ -4,21 +4,27 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/codepnw/godevelopment/internal/models"
 	"github.com/gin-contrib/cors"
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
 func NewRoutes(version string) {
 	r := gin.Default()
-	store := cookie.NewStore([]byte("secret"))
 	port := os.Getenv("APP_PORT")
-	nums := []string{"auth", "account"}
+
+	db, err := gorm.Open(sqlite.Open(models.SessionFile()), &gorm.Config{})
+	if err != nil {
+		panic("failed to connect database")
+	}
+
+	if err := db.AutoMigrate(&models.Session{}); err != nil {
+		panic("unable to mae migrations sessions tables")
+	}
 
 	r.Use(cors.Default())
-	r.Use(sessions.Sessions("golang-dev", store))
-	r.Use(sessions.SessionsMany(nums, store))
 
 	// routes
 	AuthRoutes(r, version)
